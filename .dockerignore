@@ -1,0 +1,36 @@
+# Maven build files
+target/
+!target/*.jar
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.vscode/
+
+# Git files
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# Documentation files
+README.md
+*.md
+
+# Docker files
+docker-compose*.yml
+Dockerfile*
+.docker/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib 
