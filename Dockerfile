@@ -7,10 +7,11 @@ RUN mvn dependency:go-offline
 # Copy all source files
 COPY src ./src
 
-# Create an empty Firebase file if it doesn't exist to prevent build failures
+# Create a minimal valid Firebase file if it doesn't exist to prevent build failures
 RUN mkdir -p src/main/resources/ && \
-    touch src/main/resources/firebase-service-account.json && \
-    echo '{}' > src/main/resources/firebase-service-account.json
+    if [ ! -f src/main/resources/firebase-service-account.json ]; then \
+      echo '{"type":"service_account","project_id":"dummy-project","private_key_id":"dummy","private_key":"dummy","client_email":"dummy@example.com","client_id":"dummy","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"dummy"}' > src/main/resources/firebase-service-account.json; \
+    fi
 
 # Build the application
 RUN mvn clean package -DskipTests

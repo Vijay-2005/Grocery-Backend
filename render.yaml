@@ -19,6 +19,8 @@ services:
         value: root
       - key: MYSQL_PASSWORD
         value: lXMmSbkCNDnDSqhIRRQpOzoIBAHNZfaV
+      - key: DEVELOPMENT_MODE
+        value: "true"
     buildFilter:
       paths:
         - src/**
