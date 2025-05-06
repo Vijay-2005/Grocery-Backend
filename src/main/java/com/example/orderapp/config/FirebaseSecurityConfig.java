@@ -102,6 +102,13 @@ public class FirebaseSecurityConfig {
                         return;
                     }
                     
+                    // Skip authentication for health endpoint
+                    String requestPath = req.getRequestURI();
+                    if (requestPath.equals("/api/health")) {
+                        chain.doFilter(req, res);
+                        return;
+                    }
+                    
                     String token = req.getHeader("Authorization");
                     if (token != null && token.startsWith("Bearer ")) {
                         try {
