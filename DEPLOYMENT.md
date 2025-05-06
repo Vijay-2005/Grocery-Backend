@@ -21,12 +21,14 @@ The application will be available at the URL provided by Render once the deploym
 
 ## Environment Variables
 
-You may need to set up the following environment variables in your Render.com dashboard:
+The following environment variables are configured in render.yaml:
 
-- `SPRING_DATASOURCE_URL`: Your database connection URL
-- `SPRING_DATASOURCE_USERNAME`: Database username
-- `SPRING_DATASOURCE_PASSWORD`: Database password
-- `FIREBASE_CONFIG`: Your Firebase configuration (if using Firebase Auth)
+- `DATABASE_URL`: MySQL database URL (default: Railway MySQL instance)
+- `MYSQL_USERNAME`: Database username (default: root)
+- `MYSQL_PASSWORD`: Database password
+- `SPRING_PROFILES_ACTIVE`: Set to "prod" to use production configuration
+
+If you need to change these values, you can modify them in the Render dashboard.
 
 ## Local Deployment with Docker
 
@@ -61,10 +63,15 @@ If you want to deploy just the Docker container without Docker Compose:
    docker run -p 8080:8080 grocery-backend
    ```
 
+## Firebase Configuration
+
+The application expects a Firebase service account JSON file at `src/main/resources/firebase-service-account.json`. 
+Make sure this file exists before building the Docker image.
+
 ## Troubleshooting
 
 ### Application Health Check
-You can check the health of your application by visiting `/actuator/health` endpoint.
+You can check the health of your application by visiting `/actuator/health` or `/api/health` endpoints.
 
 ### Container Logs
 To view logs from the Docker container:

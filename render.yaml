@@ -1,9 +1,9 @@
 services:
   - type: web
     name: grocery-backend
-    env: docker
-    healthCheckPath: /actuator/health
+    runtime: docker
     plan: free
+    healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
@@ -11,5 +11,16 @@ services:
         value: "-Xmx500m -Xms500m"
       - key: PORT
         value: 8080
-    buildCommand: docker build -t grocery-backend .
-    startCommand: docker run -p $PORT:8080 grocery-backend 
+      - key: DOCKER_BUILDKIT
+        value: "0"
+      - key: DATABASE_URL
+        value: jdbc:mysql://root:lXMmSbkCNDnDSqhIRRQpOzoIBAHNZfaV@interchange.proxy.rlwy.net:52270/railway
+      - key: MYSQL_USERNAME  
+        value: root
+      - key: MYSQL_PASSWORD
+        value: lXMmSbkCNDnDSqhIRRQpOzoIBAHNZfaV
+    buildFilter:
+      paths:
+        - src/**
+        - pom.xml
+        - Dockerfile 
