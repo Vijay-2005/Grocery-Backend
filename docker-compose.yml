@@ -1,28 +1,58 @@
+# Docker Compose Configuration for Grocery Order Application
+# ==================================================
+# This file defines a multi-container environment for development and testing
+# with both the application and database running in separate containers.
 version: '3.8'
 
 services:
+  # Backend Application Service
+  # --------------------------
+  # This service builds and runs the Spring Boot application
   app:
+    # Build from the current directory using the Dockerfile
     build: .
+    # Name the container for easier reference
     container_name: grocery-backend
+    # Port mapping: host:container
     ports:
       - "8080:8080"
+    # Environment variables for the application
     environment:
+      # Use development Spring profile
       - SPRING_PROFILES_ACTIVE=dev
+      # JVM memory settings for optimal performance
       - JAVA_OPTS=-Xmx512m -Xms256m
+    # Restart policy: keep container running unless explicitly stopped
     restart: unless-stopped
 
+  # Database Service
+  # ---------------
+  # PostgreSQL database for storing application data
   db:
+    # Use PostgreSQL 14 Alpine (lightweight Linux) image
     image: postgres:14-alpine
+    # Name the container for easier reference
     container_name: grocery-db
+    # Port mapping for database access from host
     ports:
       - "5432:5432"
+    # Database configuration
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=grocerydb
+    # Persistent storage for database data
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    # Restart policy: keep database running unless explicitly stopped
     restart: unless-stopped
 
+# Persistent Volumes
+# -----------------
+# Define named volumes to persist data between container restarts
 volumes:
-  postgres-data: 
+  # Volume for PostgreSQL data files
+  # This ensures data survives container restarts and rebuilds
+  postgres-data:
+    # Uses default Docker volume driver
+    # Data is stored in /var/lib/docker/volumes on the host
