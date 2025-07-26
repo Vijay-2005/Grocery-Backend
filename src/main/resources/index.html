@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Auth Token Generator</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 400px; margin: auto; }
+        label { display: block; margin-top: 15px; }
+        input { width: 100%; padding: 8px; margin-top: 5px; }
+        button { margin-top: 20px; padding: 10px 20px; }
+        textarea { width: 100%; margin-top: 10px; }
+        #status { margin-top: 15px; color: #d00; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Firebase Authentication Token Generator</h2>
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+        <button id="login">Login with Email</button>
+        <button id="getToken">Get ID Token</button>
+        <div id="status"></div>
+        <h3>Your ID Token:</h3>
+        <textarea id="token" rows="10" readonly></textarea>
+    </div>
+    <script>
+        // Your Firebase configuration (public, from Firebase Console)
+        const firebaseConfig = {
+            apiKey: "apikey",
+            authDomain: "groceryapp-71a7a.firebaseapp.com",
+            projectId: "groceryapp-71a7a",
+            storageBucket: "groceryapp-71a7a.appspot.com",
+            messagingSenderId: "390722990078",
+            appId: "1:390722990078:web:f12ef9c2df4a61e0ca58e2"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const statusDiv = document.getElementById('status');
+
+        document.getElementById('login').addEventListener('click', () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            statusDiv.style.color = '#d00';
+            statusDiv.textContent = '';
+            if (!email || !password) {
+                statusDiv.textContent = 'Please enter both email and password.';
+                return;
+            }
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    statusDiv.style.color = 'green';
+                    statusDiv.textContent = 'Login successful!';
+                })
+                .catch((error) => {
+                    statusDiv.textContent = 'Login failed: ' + error.message;
+                });
+        });
+
+        document.getElementById('getToken').addEventListener('click', () => {
+            const user = firebase.auth().currentUser;
+            if (user) {
+                user.getIdToken(true).then((idToken) => {
+                    document.getElementById('token').value = idToken;
+                    statusDiv.style.color = 'green';
+                    statusDiv.textContent = 'Token generated!';
+                }).catch((error) => {
+                    statusDiv.style.color = '#d00';
+                    statusDiv.textContent = 'Error getting token: ' + error.message;
+                });
+            } else {
+                statusDiv.style.color = '#d00';
+                statusDiv.textContent = 'Please login first.';
+            }
+        });
+    </script>
+</body>
+</html>
