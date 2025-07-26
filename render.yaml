@@ -13,12 +13,20 @@ services:
         value: 8080
       - key: DOCKER_BUILDKIT
         value: "0"
-      - key: DATABASE_URL
-        value: jdbc:mysql://root:lXMmSbkCNDnDSqhIRRQpOzoIBAHNZfaV@interchange.proxy.rlwy.net:52270/railway
-      - key: MYSQL_USERNAME  
-        value: root
-      - key: MYSQL_PASSWORD
-        value: lXMmSbkCNDnDSqhIRRQpOzoIBAHNZfaV
+      - key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+        value: org.postgresql.Driver
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:6543/postgres?user=postgres.jifrtixjovwxoxkisnzk&password=Grocery@123.#
+      - key: SPRING_DATASOURCE_USERNAME
+        value: postgres
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: Grocery@123.#
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: none
+      - key: SPRING_JPA_SHOW_SQL
+        value: "true"
+      - key: SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY
+        value: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       - key: DEVELOPMENT_MODE
         value: "true"
     buildFilter:
