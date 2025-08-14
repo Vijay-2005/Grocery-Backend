@@ -28,7 +28,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-
+import java.io.ByteArrayInputStream; 
 @Configuration
 @EnableWebSecurity
 public class FirebaseSecurityConfig {
@@ -37,6 +37,9 @@ public class FirebaseSecurityConfig {
 
     @Value("${firebase.service.account.file}")
     private String firebaseConfigPath;
+
+    @Value("${firebase.service.account.json:}")
+    private String firebaseServiceAccountJson;
     
     @Value("${app.auth.development-mode:false}")
     private boolean developmentMode;
@@ -66,7 +69,19 @@ public class FirebaseSecurityConfig {
         // Initialize Firebase
         if (FirebaseApp.getApps().isEmpty() && !developmentMode) {
             try {
-                InputStream serviceAccount = new ClassPathResource(firebaseConfigPath.replace("classpath:", "")).getInputStream();
+                InputStream serviceAccount ;
+
+
+                if (firebaseServiceAccountJson != null && !firebaseServiceAccountJson.trim().isEmpty()) {
+                    // Use JSON from environment variable
+                    serviceAccount = new ByteArrayInputStream(firebaseServiceAccountJson.getBytes());
+                    logger.info("Using Firebase config from environment variable");
+                } else {
+                    // Fallback to file from classpath
+                    serviceAccount = new ClassPathResource(firebaseConfigPath.replace("classpath:", "")).getInputStream();
+                    logger.info("Using Firebase config from classpath file");
+                }
+                
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .build();
