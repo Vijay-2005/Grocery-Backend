@@ -27,8 +27,7 @@ services:
         value: "true"
       - key: SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY
         value: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      - key: FIREBASE_SERVICE_ACCOUNT_FILE
-        value: "classpath:firebase-service-account.json"
+      
       - key: APP_AUTH_DEVELOPMENT_MODE
         value: "false"
     buildFilter:
