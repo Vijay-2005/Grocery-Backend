@@ -3,7 +3,7 @@ services:
     name: grocery-backend
     runtime: docker
     plan: free
-    healthCheckPath: /actuator/health
+    healthCheckPath: /api/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
@@ -22,7 +22,7 @@ services:
       - key: SPRING_DATASOURCE_PASSWORD
         value: Grocery@123.#
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
-        value: none
+         value: update
       - key: SPRING_JPA_SHOW_SQL
         value: "true"
       - key: SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY
